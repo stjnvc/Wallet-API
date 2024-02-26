@@ -6,11 +6,6 @@ import (
 )
 
 func Setup(router *gin.Engine) {
-	router.GET("/", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"message": "It works!",
-		})
-	})
 	router.GET("/api/v1/wallets/:wallet_id/balance", handler.BalanceHandler)
 	router.GET("/api/v1/wallets/:wallet_id/credit", handler.CreditHandler)
 	router.POST("/api/v1/wallets/:wallet_id/debit", handler.DebitHandler)

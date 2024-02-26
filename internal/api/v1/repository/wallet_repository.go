@@ -1,14 +1,26 @@
 package repository
 
-type WalletRepository interface {
-	// Placeholder for wallet repository interface
+import (
+	"github.com/stjnvc/wallet-api/internal/api/v1/model"
+	"gorm.io/gorm"
+)
+
+type WalletRepository struct {
+	db *gorm.DB
 }
 
-type walletRepository struct {
-	// Placeholder for wallet repository implementation
+func NewWalletRepository(db *gorm.DB) *WalletRepository {
+	return &WalletRepository{db}
 }
 
-func NewWalletRepository() WalletRepository {
-	// Placeholder for creating new wallet repository instance
-	return &walletRepository{}
+func (wr *WalletRepository) GetWalletByID(id uint) (*model.Wallet, error) {
+	var wallet model.Wallet
+	if err := wr.db.First(&wallet, id).Error; err != nil {
+		return nil, err
+	}
+	return &wallet, nil
+}
+
+func (wr *WalletRepository) UpdateWallet(wallet *model.Wallet) error {
+	return wr.db.Save(wallet).Error
 }
