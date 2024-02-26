@@ -1,12 +1,17 @@
-package routes
+package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/stjnvc/wallet-api/internal/api/v1/handlers"
+	"github.com/stjnvc/wallet-api/internal/api/v1/handler"
 )
 
 func Setup(router *gin.Engine) {
-	router.GET("/api/v1/wallets/:wallet_id/balance", handlers.BalanceHandler)
-	router.GET("/api/v1/wallets/:wallet_id/credit", handlers.CreditHandler)
-	router.POST("/api/v1/wallets/:wallet_id/debit", handlers.DebitHandler)
+	router.GET("/", func(context *gin.Context) {
+		context.JSON(200, gin.H{
+			"message": "It works!",
+		})
+	})
+	router.GET("/api/v1/wallets/:wallet_id/balance", handler.BalanceHandler)
+	router.GET("/api/v1/wallets/:wallet_id/credit", handler.CreditHandler)
+	router.POST("/api/v1/wallets/:wallet_id/debit", handler.DebitHandler)
 }

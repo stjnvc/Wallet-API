@@ -1,4 +1,4 @@
-package repositories
+package repository
 
 type WalletRepository interface {
 	// Placeholder for wallet repository interface
