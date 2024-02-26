@@ -1,3 +1,5 @@
+// internal/service/wallet_service.go
+
 package service
 
 import (
@@ -5,48 +7,51 @@ import (
 	"github.com/stjnvc/wallet-api/internal/api/v1/repository"
 )
 
-var ErrNegativeAmount = errors.New("negative amount is not allowed")
-var ErrInsufficientFunds = errors.New("Insufficient funds.")
-
 type WalletService struct {
-	walletRepo *repository.WalletRepository
+	walletRepo repository.WalletRepository
 }
 
-func NewWalletService(walletRepo *repository.WalletRepository) *WalletService {
-	return &WalletService{walletRepo}
+func NewWalletService(walletRepo repository.WalletRepository) *WalletService {
+	return &WalletService{walletRepo: walletRepo}
 }
 
-func (ws *WalletService) GetBalance(walletID uint) (float64, error) {
-	wallet, err := ws.walletRepo.GetWalletByID(walletID)
+func (s *WalletService) GetWalletBalance(walletID int) (float64, error) {
+	wallet, err := s.walletRepo.GetWalletByID(walletID)
 	if err != nil {
 		return 0, err
 	}
 	return wallet.Balance, nil
 }
 
-func (ws *WalletService) Credit(walletID uint, amount float64) error {
+func (s *WalletService) CreditWallet(walletID int, amount float64) error {
 	if amount < 0 {
-		return ErrNegativeAmount
+		return errors.New("amount cannot be negative")
 	}
-	wallet, err := ws.walletRepo.GetWalletByID(walletID)
+
+	wallet, err := s.walletRepo.GetWalletByID(walletID)
 	if err != nil {
 		return err
 	}
+
 	wallet.Balance += amount
-	return ws.walletRepo.UpdateWallet(wallet)
+	return s.walletRepo.UpdateWalletBalance(wallet)
 }
 
-func (ws *WalletService) Debit(walletID uint, amount float64) error {
+func (s *WalletService) DebitWallet(walletID int, amount float64) error {
 	if amount < 0 {
-		return ErrNegativeAmount
+		return errors.New("amount cannot be negative")
 	}
-	wallet, err := ws.walletRepo.GetWalletByID(walletID)
+
+	wallet, err := s.walletRepo.GetWalletByID(walletID)
 	if err != nil {
 		return err
 	}
+
 	if wallet.Balance < amount {
-		return ErrInsufficientFunds
+		return errors.New("insufficient balance")
 	}
+
 	wallet.Balance -= amount
-	return ws.walletRepo.UpdateWallet(wallet)
+
+	return s.walletRepo.UpdateWalletBalance(wallet)
 }
