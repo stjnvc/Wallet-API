@@ -33,7 +33,10 @@ func Close() error {
 }
 
 func Migrate(db *gorm.DB) error {
-	return db.AutoMigrate(&model.Wallet{})
+	return db.AutoMigrate(
+		&model.Wallet{},
+		&model.User{},
+	)
 }
 
 func Seed() error {

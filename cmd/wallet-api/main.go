@@ -31,7 +31,7 @@ func main() {
 		log.Println("Database seeded.")
 	}
 
-	router := gin.Default()
+	router := gin.New()
 
 	route.Setup(router, db.DB)
 
