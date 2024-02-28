@@ -2,8 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"github.com/stjnvc/wallet-api/internal/api/v1/route"
 	"github.com/stjnvc/wallet-api/internal/db"
+	"github.com/stjnvc/wallet-api/internal/util"
 	"log"
 )
 
@@ -29,6 +31,12 @@ func main() {
 		log.Fatalf("Failed to seed database %v", err)
 	} else {
 		log.Println("Database seeded.")
+	}
+
+	// Initialize Redis
+	err := util.InitRedisClient()
+	if err != nil {
+		logrus.Error("Failed to initialize redis cache:", err)
 	}
 
 	router := gin.New()

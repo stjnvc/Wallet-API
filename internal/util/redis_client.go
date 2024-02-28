@@ -2,22 +2,24 @@ package util
 
 import (
 	"context"
-	"fmt"
 	"github.com/redis/go-redis/v9"
 )
 
 var RedisClient *redis.Client
 
-func init() {
+func InitRedisClient() error {
 	// Initialize Redis client
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr:     "localhost:6379", // Redis server address
+		Password: "",               // Redis password
+		DB:       0,                // Redis database index
 	})
 
-	// Example: Ping the Redis server to test the connection
-	pong, err := RedisClient.Ping(context.Background()).Result()
+	// Ping the Redis server to check the connection
+	_, err := RedisClient.Ping(context.Background()).Result()
 	if err != nil {
-		panic(err)
+		return err
 	}
-	fmt.Println(pong) // Output: PONG
+
+	return nil
 }
