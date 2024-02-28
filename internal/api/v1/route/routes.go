@@ -19,6 +19,14 @@ func Setup(router *gin.Engine, db *gorm.DB) {
 	authService := service.NewAuthService(authRepository)
 	authHandler := handler.NewAuthHandler(authService)
 
+	router.GET("/", func(context *gin.Context) {
+		context.JSON(200, gin.H{
+			"api":     "Wallet API",
+			"version": "1",
+			"message": "Explore other routes defined in README",
+		})
+	})
+
 	apiRoutes := router.Group("/api/v1")
 	{
 		authRoutes := apiRoutes.Group("/auth")
