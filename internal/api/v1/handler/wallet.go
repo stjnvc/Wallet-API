@@ -15,13 +15,6 @@ type WalletHandler struct {
 }
 
 func NewWalletHandler(walletService *service.WalletService) *WalletHandler {
-
-	// Initialize Redis client
-	err := util.InitRedisClient()
-	if err != nil {
-		logrus.Error("Err loging client")
-	}
-
 	return &WalletHandler{
 		walletService: walletService,
 	}
