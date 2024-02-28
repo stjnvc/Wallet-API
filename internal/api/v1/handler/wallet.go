@@ -30,7 +30,7 @@ func (h *WalletHandler) GetBalance(c *gin.Context) {
 
 	if err == nil {
 		balance, _ := strconv.ParseFloat(balanceStr, 64)
-		logrus.Errorf("Error fetching balance for wallet ID %d: %s", walletID, err.Error())
+		logrus.Errorf("Error fetching balance for wallet ID %d: %s", walletID, err)
 		c.JSON(200, gin.H{
 			"wallet_id": walletID,
 			"balance":   balance,
